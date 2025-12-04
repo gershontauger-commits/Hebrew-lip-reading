@@ -300,6 +300,8 @@ class SegmentManager(QObject):
         os.makedirs(clips_dir, exist_ok=True)
 
         csv_path = os.path.join(output_dir, "segments.csv")
+        current_video_path = None  # Cache currently loaded video
+
         with open(csv_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -316,7 +318,10 @@ class SegmentManager(QObject):
 
                 # Extract video clip if video manager provided
                 if video_manager and segment.video_path:
-                    video_manager.load_video(segment.video_path)
+                    # Only load video if different from current
+                    if segment.video_path != current_video_path:
+                        video_manager.load_video(segment.video_path)
+                        current_video_path = segment.video_path
                     video_manager.extract_clip(
                         segment.start_frame,
                         segment.end_frame,
@@ -353,13 +358,18 @@ class SegmentManager(QObject):
             "segments": []
         }
 
+        current_video_path = None  # Cache currently loaded video
+
         for segment in self.segments:
             clip_filename = f"{segment.id[:8]}.mp4"
             clip_path = os.path.join(clips_dir, clip_filename)
 
             # Extract video clip if video manager provided
             if video_manager and segment.video_path:
-                video_manager.load_video(segment.video_path)
+                # Only load video if different from current
+                if segment.video_path != current_video_path:
+                    video_manager.load_video(segment.video_path)
+                    current_video_path = segment.video_path
                 video_manager.extract_clip(
                     segment.start_frame,
                     segment.end_frame,

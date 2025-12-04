@@ -370,8 +370,23 @@ class MainWindow(QMainWindow):
             self.time_label.setText(f"זמן: {current_time}")
 
     def update_video_frame(self):
-        """Update video frame during playback."""
-        if self.video_manager.is_playing:
+        """Update video frame during playback or recording."""
+        if self.video_manager.is_recording:
+            # Capture and display frame from camera during recording
+            frame = self.video_manager.capture_recording_frame()
+            if frame is not None:
+                self.update_video_display()
+        elif self.video_manager.is_playing:
+            # Check if we reached segment end (for segment playback)
+            segment_end = self.video_manager.segment_end_frame
+            if (segment_end is not None and
+                    self.video_manager.current_frame_index >= segment_end):
+                self.video_manager.is_playing = False
+                self.video_manager.segment_end_frame = None
+                self.play_btn.setText("▶️ נגן")
+                self.playback_timer.stop()
+                return
+
             self.video_manager.next_frame()
             self.update_video_display()
         else:
@@ -381,6 +396,7 @@ class MainWindow(QMainWindow):
         """Toggle video playback."""
         if self.video_manager.is_playing:
             self.video_manager.is_playing = False
+            self.video_manager.segment_end_frame = None  # Clear segment limit
             self.play_btn.setText("▶️ נגן")
             self.playback_timer.stop()
         else:
@@ -546,7 +562,8 @@ class MainWindow(QMainWindow):
         segment = self.segment_manager.get_segment(segment_id)
         if segment:
             self.video_manager.seek_frame(segment.start_frame)
-            # TODO: Implement segment-limited playback
+            # Set segment end frame for limited playback
+            self.video_manager.segment_end_frame = segment.end_frame
             self.toggle_playback()
 
     def clear_segment_details(self):

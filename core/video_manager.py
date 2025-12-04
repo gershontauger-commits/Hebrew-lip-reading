@@ -16,6 +16,7 @@ class VideoManager:
     def __init__(self):
         self.video_capture: Optional[cv2.VideoCapture] = None
         self.video_writer: Optional[cv2.VideoWriter] = None
+        self.camera_capture: Optional[cv2.VideoCapture] = None
         self.current_frame: Optional[np.ndarray] = None
         self.current_frame_index: int = 0
         self.total_frames: int = 0
@@ -25,6 +26,7 @@ class VideoManager:
         self.is_playing: bool = False
         self.is_recording: bool = False
         self.video_path: Optional[str] = None
+        self.segment_end_frame: Optional[int] = None
 
     def load_video(self, file_path: str) -> bool:
         """
@@ -155,7 +157,10 @@ class VideoManager:
         current_pos = self.current_frame_index
         self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
         ret, frame = self.video_capture.read()
+
+        # Restore position and re-read the current frame
         self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, current_pos)
+        self.read_current_frame()
 
         return frame if ret else None
 
@@ -213,27 +218,32 @@ class VideoManager:
             True if recording started successfully, False otherwise.
         """
         try:
-            # Open camera
-            self.video_capture = cv2.VideoCapture(0)
+            # Open camera in separate capture to preserve loaded video
+            self.camera_capture = cv2.VideoCapture(0)
 
-            if not self.video_capture.isOpened():
+            if not self.camera_capture.isOpened():
                 return False
 
-            self.width = int(self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-            self.height = int(self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            self.fps = 30.0
+            cam_width = int(
+                self.camera_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
+            )
+            cam_height = int(
+                self.camera_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            )
+            recording_fps = 30.0
 
             # Create video writer
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             self.video_writer = cv2.VideoWriter(
-                output_path, fourcc, self.fps, (self.width, self.height)
+                output_path, fourcc, recording_fps, (cam_width, cam_height)
             )
 
             if not self.video_writer.isOpened():
+                self.camera_capture.release()
+                self.camera_capture = None
                 return False
 
             self.is_recording = True
-            self.video_path = output_path
             return True
 
         except Exception as e:
@@ -248,6 +258,10 @@ class VideoManager:
             self.video_writer.release()
             self.video_writer = None
 
+        if self.camera_capture is not None:
+            self.camera_capture.release()
+            self.camera_capture = None
+
     def capture_recording_frame(self) -> Optional[np.ndarray]:
         """
         Capture and record a frame from camera.
@@ -255,10 +269,10 @@ class VideoManager:
         Returns:
             Captured frame, or None if capture failed.
         """
-        if not self.is_recording or self.video_capture is None:
+        if not self.is_recording or self.camera_capture is None:
             return None
 
-        ret, frame = self.video_capture.read()
+        ret, frame = self.camera_capture.read()
         if ret:
             self.current_frame = frame
             if self.video_writer is not None:
@@ -326,6 +340,10 @@ class VideoManager:
             self.video_capture.release()
             self.video_capture = None
 
+        if self.camera_capture is not None:
+            self.camera_capture.release()
+            self.camera_capture = None
+
         if self.video_writer is not None:
             self.video_writer.release()
             self.video_writer = None
@@ -333,6 +351,7 @@ class VideoManager:
         self.current_frame = None
         self.is_playing = False
         self.is_recording = False
+        self.segment_end_frame = None
 
     def __del__(self):
         """Destructor to ensure resources are released."""
