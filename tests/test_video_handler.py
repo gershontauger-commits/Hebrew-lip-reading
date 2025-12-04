@@ -1,6 +1,7 @@
 """Tests for the video handler module."""
 
 import os
+import shutil
 import tempfile
 
 import numpy as np
@@ -20,8 +21,6 @@ class TestVideoHandler:
     def teardown_method(self):
         """Clean up after tests."""
         self.handler.close_camera()
-        import shutil
-
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_output_directory_created(self):

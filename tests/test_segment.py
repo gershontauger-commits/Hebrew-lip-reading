@@ -2,6 +2,7 @@
 
 import json
 import os
+import shutil
 import tempfile
 from datetime import datetime
 
@@ -82,8 +83,6 @@ class TestSegmentManager:
     def teardown_method(self):
         """Clean up after tests."""
         # Clean up temp directory
-        import shutil
-
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_add_segment(self):

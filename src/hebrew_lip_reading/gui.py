@@ -8,8 +8,6 @@ from tkinter import ttk, messagebox, filedialog
 from typing import Callable, Optional
 import uuid
 
-from PIL import Image, ImageTk
-
 from .segment import Segment, SegmentManager
 from .video_handler import VideoHandler
 
