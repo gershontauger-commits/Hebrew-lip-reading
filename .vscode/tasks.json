@@ -1,0 +1,143 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Main App",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"app/main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"app/main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (module mode)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (module mode)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (module mode, refactored)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (startup message)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (show reference texts)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Main App (Hebrew only)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"-m",
+				"app.main"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Minimal Lip Reading App",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"app/lip_reading_minimal.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Minimal Lip Reading App (after upgrade)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"app/lip_reading_minimal.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Minimal Lip Reading App (final attempt)",
+			"type": "shell",
+			"command": "/home/gershon-tauger/Combined lip reading and phonenes/.venv/bin/python",
+			"args": [
+				"app/lip_reading_minimal.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Hebrew Lip Landmarks Recorder",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"app/lip_landmarks_recorder.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
